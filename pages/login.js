@@ -1,21 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import { useState } from 'react/cjs/react.production.min';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';}
 
 const LoginForm = () => {
-    const { email, setEmail } = useState(null);
-    const { password, setPassword } = useState(null);
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
 
     const signupHandler = async () => {
         if (!email || !password) return;
         try {
-           const user = await createUserWithEmailAndPassword(auth, email, password)
-           console.log(user)
-        }
-        catch (error) {
-            console.log("An error occured", error)
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            const user = userCredential.user;
+            console.log(user);
+        } catch (error) {
+            console.log('An error occurred', error);
         }
     };
 
@@ -38,7 +41,7 @@ const LoginForm = () => {
                         </span>
                     </div>
 
-                    <form onSubmit={(e) => e.preventdDefault()}>
+                    <form onSubmit={(e) => e.preventDefault()}>
                         <div className="mt-10 pl-1 flex flex-col">
                             <label>Email</label>
                             <input
